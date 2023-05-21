@@ -14,12 +14,15 @@ export async function getMemoriesById(
   const { id } = paramsSchema.parse(request.params)
 
   try {
-    const memory = await makeGetMemoriesByIdUseCase().execute(id)
+    const memory = await makeGetMemoriesByIdUseCase().execute(
+      id,
+      request.user.sub,
+    )
 
     return reply.code(200).send(memory)
   } catch (error) {
     if (error instanceof MemoryNotFoundError) {
-      return reply.code(409).send({ message: error.message })
+      return reply.code(401).send({ message: error.message })
     }
 
     throw error

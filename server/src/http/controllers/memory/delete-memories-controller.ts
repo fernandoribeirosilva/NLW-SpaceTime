@@ -14,12 +14,12 @@ export async function deleteMemory(
   const { id } = bodySchema.parse(request.params)
 
   try {
-    await makeDeleteMemoryUseCase().execute(id)
+    await makeDeleteMemoryUseCase().execute(id, request.user.sub)
 
     return reply.code(200).send()
   } catch (error) {
     if (error instanceof MemoryNotFoundError) {
-      return reply.code(409).send({ message: error.message })
+      return reply.code(401).send({ message: error.message })
     }
 
     throw error

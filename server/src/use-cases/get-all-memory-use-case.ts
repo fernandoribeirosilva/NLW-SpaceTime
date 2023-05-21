@@ -14,8 +14,8 @@ interface GetAllMemoriesUseCaseResponse {
 export class GetAllMemoriesUseCase {
   constructor(private memoryRepository: IMemory) {}
 
-  async execute(): Promise<GetAllMemoriesUseCaseResponse> {
-    const memoriesData = await this.memoryRepository.getAllMemories()
+  async execute(id: string): Promise<GetAllMemoriesUseCaseResponse> {
+    const memoriesData = await this.memoryRepository.getAllMemories(id)
 
     if (!memoriesData) {
       throw new HasNoRegisteredUserError()

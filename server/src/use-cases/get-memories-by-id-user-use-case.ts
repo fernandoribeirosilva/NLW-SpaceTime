@@ -9,10 +9,13 @@ interface GetMemoriesByIdUseCaseResponse {
 export class GetMemoriesByIdUseCase {
   constructor(private memoryRepository: IMemory) {}
 
-  async execute(id: string): Promise<GetMemoriesByIdUseCaseResponse> {
+  async execute(
+    id: string,
+    requestUserSub: string,
+  ): Promise<GetMemoriesByIdUseCaseResponse> {
     const memory = await this.memoryRepository.findById(id)
 
-    if (!memory) {
+    if (!memory?.isPublic && memory?.userId !== requestUserSub) {
       throw new MemoryNotFoundError()
     }
 

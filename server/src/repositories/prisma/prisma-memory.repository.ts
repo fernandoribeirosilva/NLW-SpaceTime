@@ -3,8 +3,11 @@ import { Memory, Prisma } from '@prisma/client'
 import { IMemory } from '../IMemory-repository'
 
 export class PrismaMemoriesRepository implements IMemory {
-  async getAllMemories() {
+  async getAllMemories(id: string) {
     return await prisma.memory.findMany({
+      where: {
+        userId: id,
+      },
       orderBy: {
         created_at: 'asc',
       },

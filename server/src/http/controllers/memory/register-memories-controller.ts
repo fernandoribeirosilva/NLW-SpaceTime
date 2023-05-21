@@ -1,4 +1,4 @@
-import { MemoryNotFoundError } from '@/use-cases/error/memory-not-found-error'
+import { ImageIsRequireError } from '@/use-cases/error/image-is-require-error'
 import { makeRegisterMemoryUseCase } from '@/use-cases/factories/make-registerMemory-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
@@ -20,12 +20,12 @@ export async function registerMemory(
       content,
       coverUrl,
       isPublic,
-      userId: '7f71aeeb-caec-41f6-86c8-5562c7b7d2c3',
+      userId: request.user.sub,
     })
 
     return reply.code(201).send(memory)
   } catch (error) {
-    if (error instanceof MemoryNotFoundError) {
+    if (error instanceof ImageIsRequireError) {
       return reply.code(409).send({ message: error.message })
     }
 

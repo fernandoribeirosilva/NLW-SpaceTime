@@ -22,7 +22,11 @@ export async function updateMemory(
   const memoryData = bodySchema.parse(request.body)
 
   try {
-    const memory = await makeUpdateMemoryUseCase().execute(id, memoryData)
+    const memory = await makeUpdateMemoryUseCase().execute(
+      id,
+      memoryData,
+      request.user.sub,
+    )
 
     return reply.code(200).send(memory)
   } catch (error) {

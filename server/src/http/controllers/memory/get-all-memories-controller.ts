@@ -1,4 +1,4 @@
-import { HasNoRegisteredUserError } from '@/use-cases/error/has-no-registered-user-error'
+import { MemoryNotFoundError } from '@/use-cases/error/memory-not-found-error'
 import { makeGetAllMemoryUseCase } from '@/use-cases/factories/make-getAllMemory-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
@@ -7,12 +7,12 @@ export async function getAllMemories(
   reply: FastifyReply,
 ) {
   try {
-    const memories = await makeGetAllMemoryUseCase().execute()
+    const memories = await makeGetAllMemoryUseCase().execute(request.user.sub)
 
     return reply.code(200).send(memories)
   } catch (error) {
-    if (error instanceof HasNoRegisteredUserError) {
-      return reply.code(409).send({ message: error.message })
+    if (error instanceof MemoryNotFoundError) {
+      return reply.code(401).send({ message: error.message })
     }
 
     throw error
